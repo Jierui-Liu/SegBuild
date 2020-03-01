@@ -128,3 +128,4 @@ output
 ./output
 ./model/HRNet/models/pretrain_model
 .DS_Store
+./exp
