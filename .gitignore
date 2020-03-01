@@ -126,6 +126,8 @@ output/model/resnet50_temp.pth
 output
 ./model/hrnet_repo
 ./output
-./model/HRNet/models/pretrain_model
+model/HRNet/models/pretrain_model
 .DS_Store
 ./exp
+exp/
+

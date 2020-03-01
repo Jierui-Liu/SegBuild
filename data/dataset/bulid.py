@@ -2,7 +2,7 @@
 Author      : now more
 Contact     : lin.honghui@qq.com
 LastEditors: Please set LastEditors
-LastEditTime: 2020-03-01 00:50:49
+LastEditTime: 2020-03-01 03:39:07
 Description : 
 '''
 from  torch.utils.data import Dataset
@@ -68,9 +68,9 @@ class load_dataAll(Dataset):
         
         mask_name = self.mask_list[idx]
         if ".npy" == mask_name[-4:]:
-            mask = np.load(mask_name)//255
+            mask = np.load(mask_name)%254
         else:
-            mask = cv.imread(mask_name)//255
+            mask = cv.imread(mask_name)%254
 
         sample = {'image':image,'mask':mask}
         if self.transforms:
@@ -78,35 +78,8 @@ class load_dataAll(Dataset):
         return sample['image'],sample['mask']
 
 
-class png_dataset(Dataset):
-    def __init__(self,image_dir,mask_dir,transforms=None):
-        self.transforms = transforms
-        self.image_dir = image_dir
-        self.mask_dir = mask_dir
-        self.image_list = glob('/home/chenbangdong/cbd/DrivenDATA/dataset2/image_bin/*.npy')#+glob('/home/chenbangdong/cbd/DrivenDATA/test_dataset_npy/image_bin/*.npy')
-        self.lable_list = glob('/home/chenbangdong/cbd/DrivenDATA/dataset2/label_bin/*.npy')#+glob('/home/chenbangdong/cbd/LinHonghui/exp/ensemble/ensemble_76_77_75/submit/*.tif')
-        self.image_list.sort()
-        self.lable_list.sort()
-    def __len__(self):
-        return len(self.image_list)
-    
-    def __getitem__(self,idx):
-        # image_name = os.path.join(self.image_dir,"imageBin_"+str(idx)+".npy")
-        image_name = self.image_list[idx]
-        image = np.load(image_name)
 
-        # mask_name = os.path.join(self.mask_dir,"labelBin_"+str(idx)+".npy")
-        mask_name = self.lable_list[idx]
-        if ".tif" in mask_name:
-            mask = cv.imread(mask_name,cv.IMREAD_GRAYSCALE)
-        else:
-            mask = np.load(mask_name)%254  # label有的为1 有的为0
-        sample = {'image':image,'mask':mask}
-        
 
-        if self.transforms:
-            sample = self.transforms(sample)
-        return sample['image'],sample['mask']
             
 
 
