@@ -2,7 +2,7 @@
  # @Author      : now more
  # @Contact     : lin.honghui@qq.com
  # @LastEditors: Please set LastEditors
- # @LastEditTime: 2020-03-01 00:20:48
+ # @LastEditTime: 2020-03-01 21:19:16
  # @Description : 
  ###
 # >>> conda initialize >>>
@@ -23,8 +23,11 @@ unset __conda_setup
 cd tools
 conda activate SegBulid
 
-config_file="../configs/server_6121_hrnet_w48_up8_freeze_9_sgd_cross_entropy2d_train_1_batch_12_step_size_up_5000.py"  
+# config_file="../configs/server_6121_hrnet_w48_up8_freeze_9_sgd_cross_entropy2d_train_1_batch_12_step_size_up_5000.py"  
+config_file="../configs/server_6121_hrnet_w48_up8_freeze_9_sgd_cross_entropy2d_train_1_agri_batch_16_step_size_up_2500.py"
 val_image_dir="/home/LinHonghui/Datasets/SegBulid/test_dataset_npy/image_bin/"
-path="/home/LinHonghui/Project/DrivenData_2020_SegBulid/output/model/hrnet_w48_up8_server_6121_hrnet_w48_up8_freeze_9_sgd_cross_entropy2d_train_1_batch_12_step_size_up_5000_40000.pth"
-python inference.py -device 0 1 2 -config_file $config_file \
-      -val_image_dir $val_image_dir -path $path -val_batch_size 24
+# path="/home/LinHonghui/Project/DrivenData_2020_SegBulid/output/model/hrnet_w48_up8_server_6121_hrnet_w48_up8_freeze_9_sgd_cross_entropy2d_train_1_batch_12_step_size_up_5000_40000.pth"
+# path="/home/LinHonghui/Project/DrivenData_2020_SegBulid/output/model/hrnet_w48_up8_server_6121_hrnet_w48_up8_freeze_9_sgd_cross_entropy2d_train_1_agri_batch_16_step_size_up_2500_30000.pth" # 78.60
+path="/home/LinHonghui/Project/DrivenData_2020_SegBulid/output/model/hrnet_w48_up8_server_6121_hrnet_w48_up8_freeze_9_sgd_cross_entropy2d_train_1_agri_batch_16_step_size_up_2500_25000.pth"
+python inference.py -device 0 1 2  -path $path -val_batch_size 24 -config_file $config_file \
+    -val_image_dir $val_image_dir

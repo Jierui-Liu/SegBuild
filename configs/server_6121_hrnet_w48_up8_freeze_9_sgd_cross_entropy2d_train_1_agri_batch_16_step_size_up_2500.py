@@ -2,7 +2,7 @@
 Author      : now more
 Contact     : lin.honghui@qq.com
 LastEditors: Please set LastEditors
-LastEditTime: 2020-03-01 01:07:08
+LastEditTime: 2020-03-01 22:20:25
 Description : 
 '''
 
@@ -51,7 +51,7 @@ config = dict(
                     dict(type="Normalize",mean=[0.485, 0.456, 0.406],std=[0.229, 0.224, 0.225],inplace=False),
         ],
         dataset = dict(type="inference_dataset",
-                    test_image_dir = r"/home/chenbangdong/cbd/DrivenDATA/test_dataset_npy/image_bin/"
+                    test_image_dir = r"/home/LinHonghui/Datasets/SegBulid/test_dataset_npy/image_bin/"
                     ),
         batch_size = 18,
         shuffle = False,

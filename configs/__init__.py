@@ -2,14 +2,14 @@
 Author      : now more
 Contact     : lin.honghui@qq.com
 LastEditors: Please set LastEditors
-LastEditTime: 2020-02-29 22:50:29
+LastEditTime: 2020-03-01 10:46:04
 Description : 
 '''
 from argparse import ArgumentParser
 
 def load_arg():
     parser = ArgumentParser(description="Pytorch Training")
-    parser.add_argument("-config_file","--CONFIG_FILE",type=str,required=True,help="Path to config file")
+    parser.add_argument("-config_file","--CONFIG_FILE",type=str,required=False,help="Path to config file")
     parser.add_argument("-multi_gpu","--ENABLE_MULTI_GPU",action="store_true")
     parser.add_argument("-tag","--TAG",type=str)
     parser.add_argument("-device","--DEVICE",type=int,nargs='+',

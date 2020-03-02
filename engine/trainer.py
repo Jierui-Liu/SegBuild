@@ -121,7 +121,7 @@ def do_train(cfg,model,train_loader,val_loader,optimizer,scheduler,loss_fn,metri
         if isinstance(scheduler,lr_scheduler.CyclicLR):
             save_period = 2*cfg['lr_scheduler']['step_size_up']
             current_iter = (engine.state.iteration-1)%len_train_loader + 1 + engine.state.epoch*len_train_loader # 计算当前 iter
-            if current_iter%save_period==0 and current_iter >= save_period*3:  # 从第 6 个周期开始存
+            if current_iter%save_period==0 and current_iter >= save_period*2:  # 从第 6 个周期开始存
                 
                 save_dir = cfg['save_dir']
                 if not os.path.isdir(save_dir):

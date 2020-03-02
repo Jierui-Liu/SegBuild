@@ -2,7 +2,7 @@
 Author      : now more
 Contact     : lin.honghui@qq.com
 LastEditors: Please set LastEditors
-LastEditTime: 2020-03-01 22:20:38
+LastEditTime: 2020-03-01 22:20:03
 Description : 
 '''
 
@@ -20,7 +20,7 @@ config = dict(
         transforms = [
                     dict(type="RandomHorizontalFlip",p=0.5),
                     dict(type="RandomVerticalFlip",p=0.5),
-                    dict(type="ColorJitter",brightness=0.1,contrast=0.1,saturation=0.1,hue=0.1),
+                    dict(type="ColorJitter",brightness=0.15,contrast=0.15,saturation=0.15,hue=0.15),
                     dict(type="Shift_Padding",p=0.1,hor_shift_ratio=0.05,ver_shift_ratio=0.05,pad=0),
                     dict(type="RandomErasing",p=0.2,sl=0.02,sh=0.4,rl=0.2),
                     dict(type="GaussianBlur",p=0.2,radiu=2),
@@ -36,7 +36,7 @@ config = dict(
                     # pseudo_label
                     pseudo_image_dir = r"", pseudo_mask_dir = r"",  
                     # extra_datasets --> List[]
-                    extra_image_dir_list = [r""],  extra_mask_dir_list = [r""],   
+                    extra_image_dir_list = [r"/home/LinHonghui/Datasets/SegBulid/agriculture_data/image"],  extra_mask_dir_list = [r"/home/LinHonghui/Datasets/SegBulid/agriculture_data/label"],   
         ),
         batch_size = 12,
         shuffle = True,
@@ -53,7 +53,7 @@ config = dict(
         dataset = dict(type="inference_dataset",
                     test_image_dir = r"/home/LinHonghui/Datasets/SegBulid/test_dataset_npy/image_bin/"
                     ),
-        batch_size = 18,
+        batch_size = 9,
         shuffle = False,
         num_workers = 8,
         drop_last = False,  
@@ -64,7 +64,7 @@ config = dict(
     model = dict(
         type = "hrnet_w48_up8",
         num_classes = 2,
-        freeze_num_layers = 9,
+        freeze_num_layers = 0,
     ),
     pretrain = r"",
     multi_gpu = True,
@@ -72,7 +72,7 @@ config = dict(
 
     # Solver
     enable_swa = False,
-    criterion = dict(type="cross_entropy2d"),
+    criterion = dict(type="LabelSmoothing",win_size=11,num_classes=2,smoothing=0.1,fix_flag=True,Max_Smootning=0.2),
     lr_scheduler = dict(type="CyclicLR",base_lr=1e-5,max_lr=1e-2,step_size_up=5000,mode='triangular2',cycle_momentum=True), # cycle_momentum=False if optimizer==Adam
     optimizer = dict(type="SGD",lr=1e-4,momentum=0.9,weight_decay=1e-5),
     

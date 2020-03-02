@@ -2,7 +2,7 @@
 Author      : now more
 Contact     : lin.honghui@qq.com
 LastEditors: Please set LastEditors
-LastEditTime: 2020-03-01 00:34:15
+LastEditTime: 2020-03-01 21:39:47
 Description : 
 '''
 import sys
@@ -20,6 +20,23 @@ from tqdm import tqdm
 import cv2 as cv
 from configs import merage_from_arg,load_arg
 import datetime
+import zipfile
+
+def zipDir(dirpath,outFullName):
+    """
+    压缩指定文件夹
+    :param dirpath: 目标文件夹路径
+    :param outFullName: 压缩文件保存路径+xxxx.zip
+    :return: 无
+    """
+    zip = zipfile.ZipFile(outFullName,"w",zipfile.ZIP_DEFLATED)
+    for path,dirnames,filenames in os.walk(dirpath):
+        # 去掉目标跟路径，只对目标文件夹下边的文件及文件夹进行压缩
+        fpath = path.replace(dirpath,'')
+
+        for filename in filenames:
+            zip.write(os.path.join(path,filename),os.path.join(fpath,filename))
+    zip.close()
 
 def inference_forward(cfg,model,dataloader,tta_flag=False):
     print("------- start -------")
@@ -84,3 +101,4 @@ if __name__ == "__main__":
     cfg['save_dir'] = save_dir
     dataloader = make_dataloader(cfg['test_pipeline'])
     inference_forward(cfg,model,dataloader,tta_flag=True)
+    zipDir(save_dir,save_dir+".zip") # 压缩至根目录
