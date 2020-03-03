@@ -131,3 +131,4 @@ model/HRNet/models/pretrain_model
 ./exp
 exp/
 
+model/HRNet/hrnet_w18_small_model_v2.pth

@@ -70,7 +70,7 @@ class load_dataAll(Dataset):
         if ".npy" == mask_name[-4:]:
             mask = np.load(mask_name)%254
         else:
-            mask = cv.imread(mask_name)%254
+            mask = cv.imread(mask_name,cv.IMREAD_GRAYSCALE)%254
 
         sample = {'image':image,'mask':mask}
         if self.transforms:

@@ -24,7 +24,8 @@ cd tools
 conda activate SegBulid
 
 # config_file="../configs/server_6121_hrnet_w48_up8_freeze_9_sgd_cross_entropy2d_train_1_batch_12_step_size_up_5000.py"  
-config_file="../configs/server_6121_hrnet_w48_up8_freeze_0_sgd_LabelSmoothing_train_1_batch_9_step_size_up_5000.py"
+# config_file="../configs/server_6121_hrnet_w48_up8_freeze_0_sgd_LabelSmoothing_train_1_batch_9_step_size_up_5000.py"
+config_file="../configs/server_6125_hrnet_w48_up8_freeze_9_sgd_cross_entropy2d_train_1_agri_p79_batch_12_step_size_up_5000.py"
 
-python train.py -device 0 1 2   -config_file $config_file 
+python train.py -device 1 2 3   -config_file $config_file 
 

@@ -417,11 +417,12 @@ def randomcrop(sample,output_size):
         image,mask = sample['image'],sample['mask']
         h,w = image.shape[:2]
         new_w,new_h = output_size
-        top = np.random.randint(0,h-new_h)
-        left = np.random.randint(0,w-new_w)
+        if new_h < h and new_w < w:
+            top = np.random.randint(0,h-new_h)
+            left = np.random.randint(0,w-new_w)
 
-        image = image[top:top+new_h,left:left+new_w]
-        mask = mask[top:top+new_h,left:left+new_w]
+            image = image[top:top+new_h,left:left+new_w]
+            mask = mask[top:top+new_h,left:left+new_w]
         sample = {"image":image,"mask":mask}
         return sample
 
