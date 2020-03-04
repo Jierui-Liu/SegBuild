@@ -75,11 +75,12 @@ if __name__ == "__main__":
     # 若更新了load_arg函数，需要对应更新merage_from_arg()
     arg = vars(load_arg())
     if arg['MODEL.LOAD_PATH'] != None: #优先级：arg传入命令 >model中存的cfg > config_file
-        cfg = torch.load(arg['MODEL.LOAD_PATH'])['cfg']
+        cfg = torch.load(arg['MODEL.LOAD_PATH'],map_location="cpu")['cfg']
     # 待修改
     config_file = arg["CONFIG_FILE"]
-    config_file = config_file.replace("../","").replace(".py","").replace('/','.')
-    exec(r"from {} import config as cfg".format(config_file))
+    if config_file:
+        config_file = config_file.replace("../","").replace(".py","").replace('/','.')
+        exec(r"from {} import config as cfg".format(config_file))
 
     cfg = merage_from_arg(cfg,arg)
 

@@ -27,7 +27,7 @@ conda activate SegBulid
 config_file="../configs/server_6121_hrnet_w48_up8_freeze_9_sgd_cross_entropy2d_train_1_agri_batch_16_step_size_up_2500.py"
 # val_image_dir="/home/LinHonghui/Datasets/SegBulid/test_dataset_npy/image_bin/"
 # val_image_dir="/home/chenbangdong/cbd/DrivenDATA/test_dataset_npy/image_bin/"
-val_image_dir="/home/chenbangdong/cbd/LinHonghui/DrivenData_2020_SegBulid/SegBuild/exp/save_tif"
+val_image_dir="/home/chenbangdong/cbd/DrivenDATA/test_dataset_transfer/image_bin/"
 # path="/home/LinHonghui/Project/DrivenData_2020_SegBulid/output/model/hrnet_w48_up8_server_6121_hrnet_w48_up8_freeze_9_sgd_cross_entropy2d_train_1_batch_12_step_size_up_5000_40000.pth"
 # path="/home/LinHonghui/Project/DrivenData_2020_SegBulid/output/model/hrnet_w48_up8_server_6121_hrnet_w48_up8_freeze_9_sgd_cross_entropy2d_train_1_agri_batch_16_step_size_up_2500_30000.pth" # 78.60
 # path="/home/LinHonghui/Project/DrivenData_2020_SegBulid/output/model/hrnet_w48_up8_server_6121_hrnet_w48_up8_freeze_9_sgd_cross_entropy2d_train_1_agri_batch_16_step_size_up_2500_25000.pth"

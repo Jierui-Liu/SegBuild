@@ -94,7 +94,10 @@ class inference_dataset(Dataset):
     
     def __getitem__(self,idx):
         image_name = os.path.join(self.image_dir,self.image_name_list[idx])
-        image = np.load(image_name)
+        if ".npy" == image_name[-4:]:
+            image = np.load(image_name)
+        else:
+            image = cv.imread(image_name)
 
         mask = np.zeros((image.shape))
         sample = {'image':image,'mask':mask}

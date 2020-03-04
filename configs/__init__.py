@@ -60,7 +60,8 @@ def merage_from_arg(config,arg): # --> dict{},dict{}
     if arg['TAG']:
         config['tag'] = arg['TAG']
     else:
-        config['tag'] = (((arg['CONFIG_FILE']).split('/')[-1]).split('.'))[0]
+        if arg['CONFIG_FILE']:
+            config['tag'] = (((arg['CONFIG_FILE']).split('/')[-1]).split('.'))[0]
     print("TAG : ",config['tag'])
     if arg['DEVICE']:
         config['device_ids'] = arg['DEVICE']

@@ -81,11 +81,12 @@ class LabelSmoothing(nn.Module):
 
 
 class cross_entropy2d(nn.Module):
-    def __init__(self):
+    def __init__(self,weight=None):
         super(cross_entropy2d,self).__init__()
-    def forward(self,input, target, weight=None, size_average=True):
-        if weight:
-            weight = torch.tensor(weight,device=target.device)
+        self.weight = weight
+    def forward(self,input, target, size_average=True):
+        if self.weight:
+            weight = torch.tensor(self.weight,device=target.device)
         # print(input.shape,target.shape)
         # input: (n, c, h, w), target: (n, h, w)
         n, c, h, w = input.size()
