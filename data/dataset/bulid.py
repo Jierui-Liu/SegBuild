@@ -14,7 +14,7 @@ import numpy as np
 import sys
 
 class load_dataAll(Dataset):
-    def __init__(self,train_1_image_dir,train_1_mask_dir,train_2_image_dir=None,train_2_mask_dir=None,
+    def __init__(self,train_1_image_dir=None,train_1_mask_dir=None,train_2_image_dir=None,train_2_mask_dir=None,
                 pseudo_image_dir=None,pseudo_mask_dir=None,extra_image_dir_list=None,extra_mask_dir_list=None,transforms=None):
         
         self.transforms = transforms

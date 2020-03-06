@@ -26,13 +26,15 @@ conda activate SegBulid
 # config_file="../configs/server_6121_hrnet_w48_up8_freeze_9_sgd_cross_entropy2d_train_1_batch_12_step_size_up_5000.py"  
 config_file="../configs/server_6121_hrnet_w48_up8_freeze_9_sgd_cross_entropy2d_train_1_agri_batch_16_step_size_up_2500.py"
 # val_image_dir="/home/LinHonghui/Datasets/SegBulid/test_dataset_npy/image_bin/"
-# val_image_dir="/home/chenbangdong/cbd/DrivenDATA/test_dataset_npy/image_bin/"
-val_image_dir="/home/chenbangdong/cbd/DrivenDATA/test_dataset_transfer/image_bin/"
+val_image_dir="/home/chenbangdong/cbd/DrivenDATA/test_dataset_npy/image_bin/"
+# val_image_dir="/home/chenbangdong/cbd/DrivenDATA/test_dataset_transfer/image_bin/"
 # path="/home/LinHonghui/Project/DrivenData_2020_SegBulid/output/model/hrnet_w48_up8_server_6121_hrnet_w48_up8_freeze_9_sgd_cross_entropy2d_train_1_batch_12_step_size_up_5000_40000.pth"
 # path="/home/LinHonghui/Project/DrivenData_2020_SegBulid/output/model/hrnet_w48_up8_server_6121_hrnet_w48_up8_freeze_9_sgd_cross_entropy2d_train_1_agri_batch_16_step_size_up_2500_30000.pth" # 78.60
 # path="/home/LinHonghui/Project/DrivenData_2020_SegBulid/output/model/hrnet_w48_up8_server_6121_hrnet_w48_up8_freeze_9_sgd_cross_entropy2d_train_1_agri_batch_16_step_size_up_2500_25000.pth"
 # path="/home/chenbangdong/cbd/LinHonghui/DrivenData_2020_SegBulid/SegBuild/output/model/hrnet_w48_up8_server_6125_hrnet_w48_up8_freeze_9_sgd_weight_2_3cross_entropy2d_train_1_agri_aerial_batch_12_step_size_up_5000_50000.pth"
-path="/home/chenbangdong/cbd/LinHonghui/DrivenData_2020_SegBulid/SegBuild/output/model/hrnet_w48_up8_server_6121_hrnet_w48_up8_freeze_9_sgd_cross_entropy2d_train_1_agri_batch_16_step_size_up_2500_25000.pth"
+# path="/home/chenbangdong/cbd/LinHonghui/DrivenData_2020_SegBulid/SegBuild/output/model/hrnet_w48_up8_server_6121_hrnet_w48_up8_freeze_9_sgd_cross_entropy2d_train_1_agri_batch_16_step_size_up_2500_25000.pth"
+# path="/home/chenbangdong/cbd/LinHonghui/DrivenData_2020_SegBulid/SegBuild/output/model/hrnet_w48_up8_without_pretrain_server_6125_hrnet_w48_up8_without_pretrain_sgd_weight_2_3cross_entropy2d_train_1_pse8158_2_agri_aerial_batch_9_step_size_up_3138_31380.pth"
+path="/home/chenbangdong/cbd/LinHonghui/DrivenData_2020_SegBulid/SegBuild/output/model/hrnet_w48_up8_without_pretrain_server_6125_hrnet_w48_up8_without_pretrain_sgd_weight_2_3cross_entropy2d_train_1_pse8158_2_agri_aerial_batch_9_step_size_up_3138_37656.pth"
 python inference.py -device 2 3   -path $path -val_batch_size 8 \
     -val_image_dir $val_image_dir \
     #  -config_file $config_file \

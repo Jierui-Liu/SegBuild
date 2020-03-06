@@ -26,7 +26,9 @@ path="../output/model/hrnet_w48_up8_server_6121_hrnet_w48_up8_freeze_9_sgd_cross
 # config_file="../configs/server_6121_hrnet_w48_up8_freeze_9_sgd_cross_entropy2d_train_1_batch_12_step_size_up_5000.py"  
 # config_file="../configs/server_6121_hrnet_w48_up8_freeze_0_sgd_LabelSmoothing_train_1_batch_9_step_size_up_5000.py"
 # config_file="../configs/server_6125_hrnet_w48_up8_freeze_9_sgd_cross_entropy2d_train_1_agri_p79_batch_12_step_size_up_5000.py"
-config_file="../configs/server_6125_hrnet_w48_up8_freeze_9_sgd_weight_2_3cross_entropy2d_train_1_agri_aerial_batch_12_step_size_up_5000.py"
-
-python train.py -device 2 3   -config_file $config_file 
+# config_file="../configs/server_6125_hrnet_w48_up8_freeze_9_sgd_weight_2_3cross_entropy2d_train_1_agri_aerial_batch_12_step_size_up_5000.py"
+# config_file="../configs/server_6125_hrnet_w48_up8_freeze_9_sgd_weight_2_3cross_entropy2d_train_1_pse81_2_agri_aerial_batch_12_step_size_up_2350.py"
+config_file="../configs/server_6125_hrnet_w48_up8_without_pretrain_sgd_weight_2_3cross_entropy2d_train_1_pse8158_2_agri_aerial_batch_9_step_size_up_3138.py"
+python train.py -device 0 2 3   -config_file $config_file \
+                #  -path $path
 

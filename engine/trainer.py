@@ -62,6 +62,9 @@ def create_supervised_dp_trainer(model, optimizer,
 
     return Engine(_update)
 
+def adjust_learning_rate(optimizer, lr):
+    for param_group in optimizer.param_groups:
+        param_group['lr'] = lr
 
 def do_train(cfg,model,train_loader,val_loader,optimizer,scheduler,loss_fn,metrics):
 
@@ -71,14 +74,19 @@ def do_train(cfg,model,train_loader,val_loader,optimizer,scheduler,loss_fn,metri
     # create trainer
     if cfg['multi_gpu']: #多卡时，不需要传入loss_fn
         trainer = create_supervised_dp_trainer(model.train(),optimizer,device=device)
+        noise_trainer = create_supervised_dp_trainer(model.train(),optimizer,device=device)
     else:
         trainer = create_supervised_trainer(model.train(),optimizer,loss_fn,device=device)
+        
     trainer.add_event_handler(Events.ITERATION_COMPLETED,TerminateOnNan())
     RunningAverage(output_transform=lambda x:x).attach(trainer,'avg_loss')
+    RunningAverage(output_transform=lambda x:x).attach(noise_trainer,'avg_loss')
 
     # create pbar
     len_train_loader = len(train_loader)
     pbar = tqdm(total=len_train_loader)
+    len_noise_loader = len(val_loader)
+    noise_bar = tqdm(total=len_noise_loader)
 
 
 
@@ -121,7 +129,7 @@ def do_train(cfg,model,train_loader,val_loader,optimizer,scheduler,loss_fn,metri
         if isinstance(scheduler,lr_scheduler.CyclicLR):
             save_period = 2*cfg['lr_scheduler']['step_size_up']
             current_iter = (engine.state.iteration-1)%len_train_loader + 1 + (engine.state.epoch-1)*len_train_loader # 计算当前 iter
-            if current_iter%save_period==0 and current_iter >= save_period*2:  # 从第 6 个周期开始存
+            if current_iter%save_period==0 and current_iter >= save_period*2:  # 从第 4 个周期开始存
                 
                 save_dir = cfg['save_dir']
                 if not os.path.isdir(save_dir):
@@ -136,7 +144,7 @@ def do_train(cfg,model,train_loader,val_loader,optimizer,scheduler,loss_fn,metri
                 else:
                     save_pth = {'model':model.state_dict(),'cfg':cfg}
                     torch.save(save_pth,model_name)
-
+                print("Save :",model_name)
 
 
     ##########################################################################################
@@ -162,6 +170,32 @@ def do_train(cfg,model,train_loader,val_loader,optimizer,scheduler,loss_fn,metri
     def reset_pbar(engine):
         pbar.reset()
     
+    @trainer.on(Events.EPOCH_COMPLETED)
+    def train_with_noise(engine):
+        base_lr = 1e-2*0.5**(engine.state.epoch-1)
+        lr = optimizer.state_dict()['param_groups'][0]['lr']
+        adjust_learning_rate(optimizer,base_lr)
+        noise_trainer.run(val_loader,max_epochs=1)
+        adjust_learning_rate(optimizer,lr)
+
+    # 每 log_period 轮迭代结束输出train_loss
+    @noise_trainer.on(Events.ITERATION_COMPLETED)
+    def log_training_loss(engine):
+        print()
+        log_period = cfg['log_period']
+        log_per_iter = int(log_period*len_train_loader) if int(log_period*len_train_loader) >=1 else 1   # 计算打印周期
+        current_iter = (engine.state.iteration-1)%len_train_loader + 1 + (engine.state.epoch-1)*len_train_loader # 计算当前 iter
+
+        lr = optimizer.state_dict()['param_groups'][0]['lr']
+
+        if current_iter % log_per_iter == 0:
+            noise_bar.write("Noise Epoch[{}] Iteration[{}] lr {:.7f} Loss {:.7f}".format(engine.state.epoch,current_iter,lr,engine.state.metrics['avg_loss']))
+            noise_bar.update(log_per_iter)
+    
+    @noise_trainer.on(Events.EPOCH_COMPLETED)
+    def reset_noise_bar(engine):
+        noise_bar.reset()
     
     trainer.run(train_loader,max_epochs=max_epochs)
     pbar.close()
+    noise_bar.close()

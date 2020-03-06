@@ -258,7 +258,39 @@ class hrnet_w48_up8(nn.Module):
                         param.requires_grad = False
                         i += 1
    
-        
+class hrnet_w48_up8_without_pretrain(nn.Module):
+    def __init__(self,num_classes=2):
+        super(hrnet_w48_up8_without_pretrain,self).__init__()
+        self.num_classes = num_classes
+
+        config.merge_from_file(r"../model/HRNet/hrnet_config/seg_hrnet_w48_train_ohem_512x1024_sgd_lr1e-2_wd5e-4_bs_12_epoch484.yaml")
+        self.hrnet_w48 = get_seg_model(config)
+
+        self.up2 = nn.Upsample(scale_factor=2)
+        self.up4 = nn.Upsample(scale_factor=4)
+
+        self.last_layer = nn.Sequential(
+            nn.Conv2d(
+                in_channels=360,
+                out_channels=180,
+                kernel_size=1,
+                stride=1,
+                padding=0),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(
+                in_channels=180,
+                out_channels=self.num_classes,
+                kernel_size=3,
+                stride=1,
+                padding=1))
+
+    def forward(self,x):
+        x = self.hrnet_w48(x)
+        x = self.up4(x)
+        x = self.last_layer(x)
+        return self.up2(x)
+
+
 
 
 if __name__ == "__main__":

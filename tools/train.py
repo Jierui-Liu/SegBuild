@@ -34,6 +34,7 @@ if __name__ == "__main__":
 
 
     train_dataloader = make_dataloader(cfg['train_pipeline'])
+    train_noise_dataloader = make_dataloader(cfg['train_noise_pipeline'])
     model = bulid_model(cfg['model'],cfg['pretrain'])
     criterion = make_criterion(cfg['criterion'])
     optimizer = make_optimizer(cfg['optimizer'],model)
@@ -52,5 +53,5 @@ if __name__ == "__main__":
         print("enable backends cudnn benchmark")
         torch.backends.cudnn.benchmark = True
     
-    do_train(cfg,model=model,train_loader=train_dataloader,val_loader=None,optimizer=optimizer,
+    do_train(cfg,model=model,train_loader=train_dataloader,val_loader=train_noise_dataloader,optimizer=optimizer,
                 scheduler=lr_scheduler,loss_fn=criterion,metrics=None)
