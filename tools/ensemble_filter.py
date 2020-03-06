@@ -85,7 +85,6 @@ if __name__ == "__main__":
             mean_v=image_v.mean()
             if mean_r>mean_bgr*1.2:
                 tif_list[1,:,:][image_v<mean_v]=0
-                tif_list[2,:,:][image_v<mean_v]=0
                 # tif_list[3,:,:][image_v<mean_v]=0
             else:
                 pass

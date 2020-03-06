@@ -48,7 +48,8 @@ class CrossEntropy_ocr(nn.Module):
         #     score = F.interpolate(input=score, size=(
         #         h, w), mode='bilinear', align_corners=self.cfg.MODEL.ALIGN_CORNERS)
 
-        weight=torch.FloatTensor([0.9,1.1]).cuda(score.device)
+        # weight=torch.FloatTensor([0.9,1.1]).cuda(score.device)
+        weight=torch.FloatTensor([0.95,1.05]).cuda(score.device)
         n, c, h, w = score.size()
         # log_p: (n, c, h, w)
         log_p = nn.functional.log_softmax(score, dim=1)
