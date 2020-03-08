@@ -56,7 +56,7 @@ def inference_forward(cfg,model,dataloader,tta_flag=False):
                 predict += predict_flip
                 predict_flip = model(torch.flip(image,[-2]))
                 predict_flip = torch.flip(predict_flip,[-2])
-                predict_flip += predict_flip
+                predict += predict_flip
                 predict_flip = model(torch.flip(image,[-1,-2]))
                 predict_flip = torch.flip(predict_flip,[-1,-2])
                 predict += predict_flip
@@ -68,7 +68,62 @@ def inference_forward(cfg,model,dataloader,tta_flag=False):
                 # import pdb; pdb.set_trace()
                 cv.imwrite(os.path.join(save_dir,filename[i].replace('.npy','.tif')),predict[i])
                 
-                
+def multi_scale_inference_forward(cfg,model,dataloader,tta_flag=False):
+    print("------- start -------")
+    device = cfg['device_ids'][0]
+    model = model.cuda(device)
+    model.eval()
+    
+    Up_4_5 = nn.Upsample(scale_factor=0.5)
+    Up_5_4 = nn.Upsample(scale_factor=2)
+    with torch.no_grad():
+        for image,filename in tqdm(dataloader):
+            image = image.cuda(device)
+            predict = model(image)
+
+            if tta_flag:
+                predict_flip = model(torch.flip(image,[-1]))
+                predict_flip = torch.flip(predict_flip,[-1])
+                predict += predict_flip
+                predict_flip = model(torch.flip(image,[-2]))
+                predict_flip = torch.flip(predict_flip,[-2])
+                predict += predict_flip
+            # predict = torch.argmax(predict.cpu(),1).byte().numpy()
+
+            image_4_5 = Up_4_5(image)
+            predict_4_5 = model(image_4_5)
+
+            if tta_flag:
+                predict_4_5_flip = model(torch.flip(image_4_5,[-1]))
+                predict_4_5_flip = torch.flip(predict_4_5_flip,[-1])
+                predict_4_5 += predict_4_5_flip
+                predict_4_5_flip = model(torch.flip(image_4_5,[-2]))
+                predict_4_5_flip = torch.flip(predict_4_5_flip,[-2])
+                predict_4_5 += predict_4_5_flip
+            predict_4_5 = Up_5_4(predict_4_5)
+
+            image_5_4 = Up_5_4(image)
+            predict_5_4 = model(image_5_4)
+
+            if tta_flag:
+                predict_5_4_flip = model(torch.flip(image_5_4,[-1]))
+                predict_5_4_flip = torch.flip(predict_5_4_flip,[-1])
+                predict_5_4 += predict_5_4_flip
+                predict_5_4_flip = model(torch.flip(image_5_4,[-2]))
+                predict_5_4_flip = torch.flip(predict_5_4_flip,[-2])
+                predict_5_4 += predict_5_4_flip
+            predict_5_4 = Up_4_5(predict_5_4)
+
+            predict = predict + predict_4_5 + predict_5_4
+            predict = torch.argmax(predict.cpu(),1).byte().numpy()
+
+
+            
+            batch = predict.shape[0]
+            save_dir = cfg['save_dir']
+            for i in range(batch):
+                # import pdb; pdb.set_trace()
+                cv.imwrite(os.path.join(save_dir,filename[i].replace('.npy','.tif')),predict[i])
 
     
 if __name__ == "__main__":
@@ -102,4 +157,5 @@ if __name__ == "__main__":
     cfg['save_dir'] = save_dir
     dataloader = make_dataloader(cfg['test_pipeline'])
     inference_forward(cfg,model,dataloader,tta_flag=True)
+    # multi_scale_inference_forward(cfg,model,dataloader,tta_flag=True)
     zipDir(save_dir,save_dir+".zip") # 压缩至根目录

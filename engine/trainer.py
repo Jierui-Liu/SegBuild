@@ -170,18 +170,21 @@ def do_train(cfg,model,train_loader,val_loader,optimizer,scheduler,loss_fn,metri
     def reset_pbar(engine):
         pbar.reset()
     
-    @trainer.on(Events.EPOCH_COMPLETED)
+    @trainer.on(Events.ITERATION_COMPLETED)
     def train_with_noise(engine):
-        base_lr = 1e-2*0.5**(engine.state.epoch-1)
-        lr = optimizer.state_dict()['param_groups'][0]['lr']
-        adjust_learning_rate(optimizer,base_lr)
-        noise_trainer.run(val_loader,max_epochs=1)
-        adjust_learning_rate(optimizer,lr)
+        current_iter = (engine.state.iteration-1)%len_train_loader + 1 + (engine.state.epoch-1)*len_train_loader # 计算当前 iter
+        eva_period = 2*cfg['lr_scheduler']['step_size_up']+1
+
+        if current_iter%eva_period==0:
+            base_lr = 1e-2*0.8**(engine.state.epoch-1)
+            lr = optimizer.state_dict()['param_groups'][0]['lr']
+            adjust_learning_rate(optimizer,base_lr)
+            noise_trainer.run(val_loader,max_epochs=1)
+            adjust_learning_rate(optimizer,lr)
 
     # 每 log_period 轮迭代结束输出train_loss
     @noise_trainer.on(Events.ITERATION_COMPLETED)
     def log_training_loss(engine):
-        print()
         log_period = cfg['log_period']
         log_per_iter = int(log_period*len_train_loader) if int(log_period*len_train_loader) >=1 else 1   # 计算打印周期
         current_iter = (engine.state.iteration-1)%len_train_loader + 1 + (engine.state.epoch-1)*len_train_loader # 计算当前 iter

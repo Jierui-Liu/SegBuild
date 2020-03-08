@@ -35,7 +35,7 @@ config = dict(
                     # extra_datasets --> List[]
                     extra_image_dir_list = [r"/home/chenbangdong/cbd/DrivenDATA/agriculture_data/image"],  extra_mask_dir_list = [r"/home/chenbangdong/cbd/DrivenDATA/agriculture_data/label"], 
         ),
-        batch_size = 9,
+        batch_size = 12,
         shuffle = True,
         num_workers = 12,
         drop_last = True
@@ -57,11 +57,11 @@ config = dict(
                     # train_2
                     train_2_image_dir = r"/home/chenbangdong/cbd/DrivenDATA/train_tier2_dataset_2048_1800/image_bin",train_2_mask_dir = r"/home/chenbangdong/cbd/DrivenDATA/train_tier2_dataset_2048_1800/label_bin", 
                     # pseudo_label
-                    pseudo_image_dir = r"/home/chenbangdong/cbd/DrivenDATA/test_dataset_npy/image_bin/", pseudo_mask_dir = r"/home/chenbangdong/cbd/LinHonghui/DrivenData_2020_SegBulid/SegBuild/exp/8228",  
+                    pseudo_image_dir = r"/home/chenbangdong/cbd/DrivenDATA/test_dataset_npy/image_bin/", pseudo_mask_dir = r"/home/chenbangdong/cbd/LinHonghui/DrivenData_2020_SegBulid/SegBuild/exp/8232_m",  
                     # extra_datasets --> List[]
                     extra_image_dir_list = [r"/home/chenbangdong/cbd/DrivenDATA/AerialImageDataset/image_bin"],  extra_mask_dir_list = [r"/home/chenbangdong/cbd/DrivenDATA/AerialImageDataset/label_bin"],   
         ),
-        batch_size = 9,
+        batch_size = 12,
         shuffle = True,
         num_workers = 12,
         drop_last = True
@@ -84,8 +84,9 @@ config = dict(
 
     # Model
     model = dict(
-        type = "hrnet_w48_up8_without_pretrain",
+        type = "hrnet_w48_up8",
         num_classes = 2,
+        freeze_num_layers = 9,
     ),
     pretrain = r"",
     multi_gpu = True,
@@ -94,7 +95,7 @@ config = dict(
     # Solver
     enable_swa = False,
     criterion = dict(type="cross_entropy2d",weight=[0.8,1.2]),
-    lr_scheduler = dict(type="CyclicLR",base_lr=1e-5,max_lr=2e-2,step_size_up=3138,mode='triangular2',cycle_momentum=True), # cycle_momentum=False if optimizer==Adam
+    lr_scheduler = dict(type="CyclicLR",base_lr=1e-4,max_lr=1e-2,step_size_up=2350,mode='triangular2',cycle_momentum=True), # cycle_momentum=False if optimizer==Adam
     optimizer = dict(type="SGD",lr=1e-4,momentum=0.9,weight_decay=1e-5),
     
 

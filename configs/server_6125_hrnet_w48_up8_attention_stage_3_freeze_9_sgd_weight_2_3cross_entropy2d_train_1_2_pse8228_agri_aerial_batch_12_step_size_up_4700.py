@@ -19,12 +19,11 @@ config = dict(
     train_pipeline = dict(
         transforms = [
                     dict(type="RandomCrop",p=1,output_size=(1024,1024)),
-                    dict(type="RandomHorizontalFlip",p=0.5),
-                    dict(type="RandomVerticalFlip",p=0.5),
+                    dict(type="RandomHorizontalFlip",p=0.3),
+                    dict(type="RandomVerticalFlip",p=0.3),
                     dict(type="ColorJitter",brightness=0.10,contrast=0.10,saturation=0.10,hue=0.10),
-                    dict(type="Shift_Padding",p=0.1,hor_shift_ratio=0.05,ver_shift_ratio=0.05,pad=0),
-                    dict(type="RandomErasing",p=0.2,sl=0.02,sh=0.4,rl=0.2),
-                    dict(type="GaussianBlur",p=0.1,radiu=2),
+                    dict(type="Shift_Padding",p=0.05,hor_shift_ratio=0.05,ver_shift_ratio=0.05,pad=0),
+                    dict(type="RandomErasing",p=0.1,sl=0.02,sh=0.4,rl=0.2),
                     dict(type="Rescale",output_size=(512,512)),
                     dict(type="ToTensor",),
                     dict(type="Normalize",mean=[0.485, 0.456, 0.406],std=[0.229, 0.224, 0.225],inplace=False),
@@ -35,9 +34,9 @@ config = dict(
                     # extra_datasets --> List[]
                     extra_image_dir_list = [r"/home/chenbangdong/cbd/DrivenDATA/agriculture_data/image"],  extra_mask_dir_list = [r"/home/chenbangdong/cbd/DrivenDATA/agriculture_data/label"], 
         ),
-        batch_size = 9,
+        batch_size = 12,
         shuffle = True,
-        num_workers = 12,
+        num_workers = 15,
         drop_last = True
     ),
     train_noise_pipeline = dict(
@@ -61,9 +60,9 @@ config = dict(
                     # extra_datasets --> List[]
                     extra_image_dir_list = [r"/home/chenbangdong/cbd/DrivenDATA/AerialImageDataset/image_bin"],  extra_mask_dir_list = [r"/home/chenbangdong/cbd/DrivenDATA/AerialImageDataset/label_bin"],   
         ),
-        batch_size = 9,
+        batch_size = 12,
         shuffle = True,
-        num_workers = 12,
+        num_workers = 15,
         drop_last = True
     ),
     test_pipeline = dict(
@@ -84,8 +83,9 @@ config = dict(
 
     # Model
     model = dict(
-        type = "hrnet_w48_up8_without_pretrain",
+        type = "hrnet_w48_up8_attention_stage3",
         num_classes = 2,
+        freeze_num_layers = 9,
     ),
     pretrain = r"",
     multi_gpu = True,
@@ -94,7 +94,7 @@ config = dict(
     # Solver
     enable_swa = False,
     criterion = dict(type="cross_entropy2d",weight=[0.8,1.2]),
-    lr_scheduler = dict(type="CyclicLR",base_lr=1e-5,max_lr=2e-2,step_size_up=3138,mode='triangular2',cycle_momentum=True), # cycle_momentum=False if optimizer==Adam
+    lr_scheduler = dict(type="CyclicLR",base_lr=1e-4,max_lr=1e-2,step_size_up=4700,mode='triangular2',cycle_momentum=True), # cycle_momentum=False if optimizer==Adam
     optimizer = dict(type="SGD",lr=1e-4,momentum=0.9,weight_decay=1e-5),
     
 
