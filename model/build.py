@@ -23,8 +23,21 @@ def bulid_model(cfg_model,pretrain_path):
     if pretrain_path != "":
         try:
             state_dict = torch.load(pretrain_path,map_location='cpu')['model']
+            # keys = list(pretrain_state_dict.keys())
+
+            # from collections import OrderedDict
+            # new_state_dict = OrderedDict()
+            # for item in keys:
+            #     if item[6:] in state_dict.keys() and 'last_layer' not in item:
+            #         # print(item)
+            #         new_state_dict[item[6:]] = pretrain_state_dict.pop(item)
+        
+
+            # state_dict.update(new_state_dict)
+
         except:
             state_dict = torch.load(pretrain_path,map_location='cpu')
+            
         model.load_state_dict(state_dict)
     return model    
 

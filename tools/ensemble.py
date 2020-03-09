@@ -26,12 +26,15 @@ if __name__ == "__main__":
         # r"/home/chenbangdong/cbd/LinHonghui/exp/20200225_HRNet_W48_p7794/epoch_4", #78.14
         r"../exp/result_0.7860/",
         # r"../exp/result_0.8074/",
-        # r"../exp/20200307_hrnet_w48_ocr_up4_default_w95_pesudo_highscore_1_24000/",
-        # r"../exp/20200307_hrnet_w48_ocr_up4_default_w95_pesudo_highscore_1_32000/",
-        # r"../exp/20200307_hrnet_w48_ocr_up4_default_w95_pesudo_highscore_1_40000/",
-        r"../exp/20200307_hrnet_w48_ocr_up4_default_w95_pesudo_highrecall_1_24000/",
-        r"../exp/20200307_hrnet_w48_ocr_up4_default_w95_pesudo_highrecall_1_32000/",
-        r"../exp/20200307_hrnet_w48_ocr_up4_default_w95_pesudo_highrecall_1_40000/",
+        # r"../exp/20200308_hrnet_w48_ocr_up4_default_w9_pesudo_highscore_3_24000/",
+        # r"../exp/20200308_hrnet_w48_ocr_up4_default_w9_pesudo_highscore_3_32000/",
+
+        r"../exp/20200308_hrnet_w48_ocr_up4_default_w9_pesudo_highscore_3_40000/",
+        r"../exp/20200308_hrnet_w48_ocr_up4_default_w9_pesudo_highscore_2_40000/",
+        r"../exp/result_8232/",
+        # r"../exp/20200307_hrnet_w48_ocr_up4_default_w95_pesudo_highrecall_1_24000/",
+        # r"../exp/20200307_hrnet_w48_ocr_up4_default_w95_pesudo_highrecall_1_32000/",
+        # r"../exp/20200307_hrnet_w48_ocr_up4_default_w95_pesudo_highrecall_1_40000/",
         # r"../exp/20200305_hrnet_w48_ocr_up4_default_w8_lr1_50000/",
         # r"/home/l/deeplearning_1/cbd/LinHonghui/SegBulid_jr/result_0.7682_labelsmooth_epoch4",# 
         # r"/home/l/deeplearning_1/cbd/LinHonghui/SegBuild_master/exp/20200303_hrnet_w48_ocr_up4_configs_20000"# 不确定

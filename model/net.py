@@ -69,10 +69,16 @@ class hrnet_w48_ocr_up4(nn.Module):
         # print('in ',x.shape)
         x = self.hrnet_w48_ocr(x)
         
-        x1 = self.up4(x[0])
+        # x1 = self.up4(x[0])
+        # x1 = self.aux_layer(x1)
+        # # print('out 1',x1.shape)
+        # x2 = self.up4(x[1])
+        # x2 = self.last_layer(x2)
+        
+        x1 = self.up2(x[0])
         x1 = self.aux_layer(x1)
         # print('out 1',x1.shape)
-        x2 = self.up4(x[1])
+        x2 = self.up2(x[1])
         x2 = self.last_layer(x2)
         # print('out 2',x2.shape)
         return [self.up2(x1),self.up2(x2)]    

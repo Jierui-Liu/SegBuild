@@ -26,10 +26,10 @@ if __name__ == "__main__":
         # r"/home/chenbangdong/cbd/LinHonghui/exp/20200225_HRNet_W48_p7794/epoch_4", #78.14
         r"../exp/result_0.7860/",
         # r"../exp/result_0.8074/",
-        r"../exp/result_8220/",
-        r"../exp/result_8220/",
+        # r"../exp/result_8228/",
         # r"../exp/result_8220/",
-        # r"../exp/result_8158/",
+        r"../exp/lll/",
+        r"../exp/20200307_hrnet_w48_ocr_up4_default_w95_pesudo_highscore_1_24000/",
         # r"../exp/result_ensemble_highrecall/",
         # r"../exp/20200305_hrnet_w48_ocr_up4_default_w8_lr1_50000/",
         # r"/home/l/deeplearning_1/cbd/LinHonghui/SegBulid_jr/result_0.7682_labelsmooth_epoch4",# 
@@ -39,14 +39,11 @@ if __name__ == "__main__":
         assert len(os.listdir(dir))==11481
     file_list = os.listdir(dir_list[0])
 
-    rate=0.97
-    num_pixels=1024*1024
-    thres=rate*num_pixels
-    delete=['1ee2da','2a8a2c','2b1313','6a7a3a','9b424f','57abb4','597db5','621d7d','625a04','671d22','849fa9','912db2',\
-        '1982d0','4136dd','8998f4','52743c','a515a5','ab7a66','abaaf1','af21c0','affdc4','cca260']
+    
     def fun(save_dir,dir_list,tif_file):
         tif_list = [cv.imread(os.path.join(dir,tif_file),cv.IMREAD_UNCHANGED) for dir in dir_list]
         tif_list = np.array(tif_list)
+        tif_mask=tif_list[0,...]
         tif_mask=tif_list[0,...]
         
         image_init=cv.imread(os.path.join('/home/liujierui/proj/Dataset/test',tif_file[:-4],tif_file))
@@ -54,7 +51,7 @@ if __name__ == "__main__":
         mean_r=image_init_r.mean()
         mean_bgr=image_init.mean()
 
-        if tif_mask.sum()==0:
+        if False:#tif_mask.sum()==0:
             tif = tif_list.sum(axis=0)
             image_init_b=image_init[:,:,0]
             image_init_g=image_init[:,:,1]
@@ -82,45 +79,47 @@ if __name__ == "__main__":
             image_v=image_hsv[:,:,-1]
             image_s=image_hsv[:,:,-2]
             mean_v=image_v.mean()
-            mean_s=image_s.mean()
-            # print(mean_s)
-            if mean_r>mean_bgr*1.25:# and mean_s>80: #delete shadow
-                tif_list=tif_list[1:,:,:]
-                tif = tif_list.sum(axis=0)
-                tif[tif<2] = 0
-                tif[tif>=2] = 1
-                shadow_mask=tif.copy()
-                shadow_mask[image_v>mean_v]=0
-                shadow_mask[image_v<mean_v]=1
-                kernel = np.array([[0,0,0,0,0,1,0,0,0,0,0], 
-                                [0,0,0,0,0,1,0,0,0,0,0],
-                                [0,0,0,0,0,1,0,0,0,0,0],
-                                [0,0,0,0,0,1,0,0,0,0,0],
-                                [0,0,0,0,0,1,0,0,0,0,0],
-                                [1,1,1,1,1,1,1,1,1,1,1],
-                                [0,0,0,0,0,1,0,0,0,0,0],
-                                [0,0,0,0,0,1,0,0,0,0,0],
-                                [0,0,0,0,0,1,0,0,0,0,0],
-                                [0,0,0,0,0,1,0,0,0,0,0],
-                                [0,0,0,0,0,1,0,0,0,0,0]])
-                shadow_mask_acive=cv.filter2D(shadow_mask, -1, kernel)
-                shadow_mask_acive[shadow_mask_acive<21]=0
-                shadow_mask_acive[shadow_mask_acive==21]=1
-                shadow_mask=cv.filter2D(shadow_mask_acive, -1, kernel)
-                shadow_mask[shadow_mask>0]=1
-                tif=tif-shadow_mask
-                tif[tif<0]=0
-                tif=tif.astype(np.uint8)
-                # tif_list[0,:,:][image_v<mean_v]=0
-                # tif_list[1,:,:][image_v<mean_v]=0
-                # tif_list[2,:,:][image_v<mean_v]=0
-                # tif_list[3,:,:][image_v<mean_v]=0
-            else:
-                pass
-                tif_list=tif_list[1:,:,:]
-                tif = tif_list.sum(axis=0)
-                tif[tif<2] = 0
-                tif[tif>=2] = 1
+            # mean_s=image_s.mean()
+            # # print(mean_s)
+            # if mean_r>mean_bgr*1.25:# and mean_s>80: #delete shadow
+            #     tif_list=tif_list[1:,:,:]
+            #     tif = tif_list.sum(axis=0)
+                
+            #     # tif[tif<2] = 0
+            #     # tif[tif>=2] = 1
+            #     tif[tif<1] = 0
+            #     tif[tif>=1] = 1
+
+            #     shadow_mask=tif.copy()
+            #     shadow_mask[image_v>mean_v]=0
+            #     shadow_mask[image_v<mean_v]=1
+            #     kernel = np.zeros((19,19))
+            #     kernel[10,:]=1
+            #     kernel[:,10]=1
+            #     shadow_mask_acive=cv.filter2D(shadow_mask, -1, kernel)
+            #     shadow_mask_acive[shadow_mask_acive<37]=0
+            #     shadow_mask_acive[shadow_mask_acive==37]=1
+            #     shadow_mask=cv.filter2D(shadow_mask_acive, -1, kernel)
+            #     shadow_mask[shadow_mask>0]=1
+            #     tif=tif-shadow_mask
+            #     tif[tif<0]=0
+            #     tif=tif.astype(np.uint8)
+            #     # tif_list[0,:,:][image_v<mean_v]=0
+            #     # tif_list[1,:,:][image_v<mean_v]=0
+            #     # tif_list[2,:,:][image_v<mean_v]=0
+            #     # tif_list[3,:,:][image_v<mean_v]=0
+            # else:
+            #     pass
+            #     tif_list=tif_list[1:,:,:]
+            #     tif = tif_list.sum(axis=0)
+            #     tif[tif<2] = 0
+            #     tif[tif>=2] = 1
+
+            tif_list[2,:,:][image_v<mean_v]=0
+
+            tif_list=tif_list[1:,:,:]
+            tif = tif_list.sum(axis=0)
+            tif[tif>0] = 1
         
 
 
