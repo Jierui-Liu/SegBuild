@@ -14,5 +14,8 @@ cd tools
 path_8199="/home/chenbangdong/cbd/LinHonghui/DrivenData_2020_SegBulid/SegBuild/exp/8199"
 path_8257="/home/chenbangdong/cbd/LinHonghui/DrivenData_2020_SegBulid/SegBuild/exp/8257"
 path_iter_37600="/home/chenbangdong/cbd/LinHonghui/DrivenData_2020_SegBulid/SegBuild/exp/20200307_hrnet_w48_up8_attention_stage3_server_6125_hrnet_w48_up8_attention_stage_3_freeze_9_sgd_weight_2_3cross_entropy2d_train_1_2_pse8228_agri_aerial_batch_12_step_size_up_4700_37600"
-python ensemble.py -path $path_8199 $path_8257 $path_iter_37600 \
-                -save_dir /home/chenbangdong/cbd/LinHonghui/DrivenData_2020_SegBulid/SegBuild/exp/8199_8257_x
+path_1="/home/chenbangdong/cbd/LinHonghui/DrivenData_2020_SegBulid/SegBuild/exp/20200309_hrnet_w48_up8_server_6125_hrnet_w48_up8_freeze_9_sgd_weight_2_3cross_entropy2d_train_1_pse8257m_agri_aerial_batch_12_step_size_up_5662_56620"
+path_2="/home/chenbangdong/cbd/LinHonghui/DrivenData_2020_SegBulid/SegBuild/exp/20200309_hrnet_w48_up8_server_6125_hrnet_w48_up8_freeze_9_sgd_weight_2_3cross_entropy2d_train_1_pse8257m_agri_aerial_batch_12_step_size_up_5662_45296"
+path_3="/home/chenbangdong/cbd/LinHonghui/DrivenData_2020_SegBulid/SegBuild/exp/20200309_hrnet_w48_up8_server_6125_hrnet_w48_up8_freeze_9_sgd_weight_2_3cross_entropy2d_train_1_pse8257m_agri_aerial_batch_12_step_size_up_5662_33972"
+python ensemble.py -path $path_1 $path_2 $path_3 \
+                -save_dir /home/chenbangdong/cbd/LinHonghui/DrivenData_2020_SegBulid/SegBuild/exp/20200309_lll

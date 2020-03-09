@@ -5,20 +5,33 @@
  # @LastEditTime: 2020-03-01 22:15:50
  # @Description : 
  ###
+# # >>> conda initialize >>>
+# # !! Contents within this block are managed by 'conda init' !!
+# __conda_setup="$('/home/LinHonghui/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+# if [ $? -eq 0 ]; then
+#     eval "$__conda_setup"
+# else
+#     if [ -f "/home/LinHonghui/anaconda3/etc/profile.d/conda.sh" ]; then
+#         . "/home/LinHonghui/anaconda3/etc/profile.d/conda.sh"
+#     else
+#         export PATH="/home/LinHonghui/anaconda3/bin:$PATH"
+#     fi
+# fi
+# unset __conda_setup
+# # <<< conda initialize <<<
+
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/LinHonghui/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+__conda_setup="$('/home/l/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/home/LinHonghui/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/LinHonghui/anaconda3/etc/profile.d/conda.sh"
+    if [ -f "/home/l/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/l/anaconda3/etc/profile.d/conda.sh"
     else
-        export PATH="/home/LinHonghui/anaconda3/bin:$PATH"
+        export PATH="/home/l/anaconda3/bin:$PATH"
     fi
 fi
-unset __conda_setup
-# <<< conda initialize <<<
 
 cd tools
 conda activate SegBulid
@@ -30,7 +43,8 @@ path="../output/model/hrnet_w48_up8_server_6121_hrnet_w48_up8_freeze_9_sgd_cross
 # config_file="../configs/server_6125_hrnet_w48_up8_freeze_9_sgd_weight_2_3cross_entropy2d_train_1_pse81_2_agri_aerial_batch_12_step_size_up_2350.py"
 # config_file="../configs/server_6125_hrnet_w48_up8_attention_stage_3_freeze_9_sgd_weight_2_3cross_entropy2d_train_1_2_pse8228_agri_aerial_batch_12_step_size_up_4700.py"
 # config_file="../configs/server_6125_hrnet_w48_up8_without_pretrain_sgd_weight_2_3cross_entropy2d_train_1_pse8158_2_agri_aerial_batch_9_step_size_up_3138.py"
-config_file="../configs/server_6125_hrnet_w48_up8_freeze_9_sgd_weight_2_3cross_entropy2d_train_1_2_pse8232_agri_aerial_batch_12_step_size_up_2350.py"
+# config_file="../configs/server_6125_hrnet_w48_up8_freeze_9_sgd_weight_2_3cross_entropy2d_train_1_2_pse8232_agri_aerial_batch_12_step_size_up_2350.py"
+config_file="../configs/server_6125_hrnet_w48_up8_freeze_7_sgd_weight_2_3cross_entropy2d_train_1_pse8257m_agri_aerial_batch_12_step_size_up_5662.py"
 python train.py -device 0 1 2   -config_file $config_file \
                  -path $path
 
