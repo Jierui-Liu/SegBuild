@@ -41,7 +41,48 @@ class CrossEntropy_ocr(nn.Module):
         self.num_outputs=num_outputs
         self.balance_weights=balance_weights
 
-    def _forward(self, score, target, weight=None, size_average=True):
+    def _forward1(self, score, target, weight=None, size_average=True):
+        # ph, pw = score.size(2), score.size(3)
+        # h, w = target.size(1), target.size(2)
+        # if ph != h or pw != w:
+        #     score = F.interpolate(input=score, size=(
+        #         h, w), mode='bilinear', align_corners=self.cfg.MODEL.ALIGN_CORNERS)
+
+        # start=True
+        # for i in range(len(target)):
+        #     if target[i].sum()!=0:
+        #         if start:
+        #             target_new=target[i].unsqueeze(0)     
+        #             score_new=score[i].unsqueeze(0)     
+        #             start=False
+        #         else:
+        #             target_new=torch.cat((target_new,target[i].unsqueeze(0)),dim=0)  
+        #             score_new=torch.cat((score_new,score[i].unsqueeze(0)),dim=0)  
+        # if start==True:
+        #     return torch.sum(score)*0 
+
+        weight=torch.FloatTensor([0.9,1.1]).cuda(score.device)
+        n, c, h, w = score.size()
+        # log_p: (n, c, h, w)
+        log_p = nn.functional.log_softmax(score, dim=1)
+        # log_p: (n*h*w, c)
+        log_p = log_p.transpose(1, 2).transpose(2, 3).contiguous()
+        log_p = log_p[target.view(n, h, w, 1).repeat(1, 1, 1, c) >= 0]
+        log_p = log_p.view(-1, c)
+        # target: (n*h*w,)
+        mask = target >= 0
+        target = target[mask]
+        # print(target.dtype)
+        # target = target.long()
+        # print(target.dtype)
+
+        loss = nn.functional.nll_loss(log_p, target.long(), weight=weight, reduction='sum')
+        if size_average:
+            loss /= mask.data.sum()
+
+        return loss
+
+    def _forward2(self, score, target, weight=None, size_average=True):
         # ph, pw = score.size(2), score.size(3)
         # h, w = target.size(1), target.size(2)
         # if ph != h or pw != w:
@@ -49,7 +90,21 @@ class CrossEntropy_ocr(nn.Module):
         #         h, w), mode='bilinear', align_corners=self.cfg.MODEL.ALIGN_CORNERS)
 
         # weight=torch.FloatTensor([0.9,1.1]).cuda(score.device)
-        weight=torch.FloatTensor([0.95,1.05]).cuda(score.device)
+        weight=torch.FloatTensor([1,1]).cuda(score.device)
+
+        # start=True
+        # for i in range(len(target)):
+        #     if target[i].sum()!=0:
+        #         if start:
+        #             target_new=target[i].unsqueeze(0)     
+        #             score_new=score[i].unsqueeze(0)     
+        #             start=False
+        #         else:
+        #             target_new=torch.cat((target_new,target[i].unsqueeze(0)),dim=0)  
+        #             score_new=torch.cat((score_new,score[i].unsqueeze(0)),dim=0)  
+        # if start==True:
+        #     return torch.sum(score)*0        
+            
         n, c, h, w = score.size()
         # log_p: (n, c, h, w)
         log_p = nn.functional.log_softmax(score, dim=1)
@@ -80,7 +135,11 @@ class CrossEntropy_ocr(nn.Module):
         # print(len(score))
         # print(score[0].shape)
         # print(score[1].shape)
-        return sum([w * self._forward(x, target, weight, size_average) for (w, x) in zip(weights, score)])
+        # return sum([w * self._forward(x, target, weight, size_average) for (w, x) in zip(weights, score)])
+        
+        a=weights[0] * self._forward2(score[0], target, weight, size_average)
+        b=weights[1] * self._forward2(score[1], target, weight, size_average)
+        return (a+b)
 
 
 

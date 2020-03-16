@@ -21,6 +21,7 @@ def bulid_model(cfg_model,pretrain_path):
         pdb.set_trace()
 
     if pretrain_path != "":
+        print(pretrain_path)
         try:
             state_dict = torch.load(pretrain_path,map_location='cpu')['model']
             # keys = list(pretrain_state_dict.keys())

@@ -29,9 +29,9 @@ if __name__ == "__main__":
         # r"../exp/20200308_hrnet_w48_ocr_up4_default_w9_pesudo_highscore_3_24000/",
         # r"../exp/20200308_hrnet_w48_ocr_up4_default_w9_pesudo_highscore_3_32000/",
 
-        r"../exp/20200308_hrnet_w48_ocr_up4_default_w9_pesudo_highscore_3_40000/",
-        r"../exp/20200308_hrnet_w48_ocr_up4_default_w9_pesudo_highscore_2_40000/",
-        r"../exp/result_8232/",
+        r"../exp/20200313_hrnet_w48_ocr_up4_default_4_pesudo_highscore_2_continue_4_16000/",
+        r"../exp/20200313_hrnet_w48_ocr_up4_default_4_pesudo_highscore_2_continue_4_24000/",
+        r"../exp/result_8324/",
         # r"../exp/20200307_hrnet_w48_ocr_up4_default_w95_pesudo_highrecall_1_24000/",
         # r"../exp/20200307_hrnet_w48_ocr_up4_default_w95_pesudo_highrecall_1_32000/",
         # r"../exp/20200307_hrnet_w48_ocr_up4_default_w95_pesudo_highrecall_1_40000/",

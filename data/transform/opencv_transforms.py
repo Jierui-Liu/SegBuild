@@ -5,7 +5,7 @@ LastEditors: Please set LastEditors
 Description : 
 LastEditTime: 2020-02-28 17:38:59
 '''
-
+from __future__ import division
 import torch
 # import numpy as np
 from . import opencv_functional as F
@@ -16,6 +16,12 @@ import cv2 as cv
 from PIL import ImageFilter
 import numpy as np
 
+
+from . import stain_utils as utils
+from . import stainNorm_Reinhard
+import imageio
+import os
+import numpy as np
 class GaussianBlur(ImageFilter.Filter):
     name = "GaussianBlur"
 
@@ -359,3 +365,55 @@ class Rescale(object):
     
     def __repr__(self):
         return self.__class__.__name__+'(output_size={})'.format(self.output_size)
+
+
+
+
+def StainNorm(sample):
+    '''
+    Description: Normalize a patch stain to the target image.
+    Args (type): 
+        sample (np.ndarray): {"image":image,"mask":mask}
+    Return: 
+        Converted sample
+    '''
+    image,mask = sample["image"],sample["mask"]
+    # if not _is_numpy_image(image):
+    #     raise TypeError("image should be a np.ndarray image. Got {}".format(type(image)))
+    # if not _is_numpy_image(mask):
+    #     raise TypeError("landmarks should be a np.ndarray image. Got {}".format(type(landmarks)))
+
+    # target
+    # img_dir = '/home/chenbangdong/cbd/DrivenDATA/Target_StainNorm/'
+    img_dir = '/home/liujierui/proj/Dataset//Target_StainNorm/'
+    name_list = os.listdir(img_dir)
+    name = name_list[np.random.randint(0,len(name_list))]
+    target = utils.read_image(img_dir + name)
+    
+    # stainNorm
+    n = stainNorm_Reinhard.Normalizer()
+    n.fit(target)
+    image = n.transform(image)
+
+    sample = {"image":image,"mask":mask}
+    return sample
+
+
+class RandomStainNorm(object):
+    '''
+    Description: Normalize a patch stain to the target image using the method of:
+    E. Reinhard, M. Adhikhmin, B. Gooch, and P. Shirley, ‘Color transfer between images’, IEEE Computer Graphics and Applications, vol. 21, no. 5, pp. 34–41, Sep. 2001.
+
+    Args (type): 
+        p (float): probability of the image being normalize. Default value is 0.2.
+    Return: Converted sample
+    '''
+    def __init__(self,p=0.2):
+        self.p = p
+    def __call__(self,sample):
+        if np.random.random() < self.p:
+            return StainNorm(sample)
+        else:
+            return sample
+    def __repr__(self):
+        return self.__class__.__name__ + '(p={})'.format(self.p)

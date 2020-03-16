@@ -29,6 +29,7 @@ class hrnet_w48_ocr_up4(nn.Module):
 
         self.up2 = nn.Upsample(scale_factor=2)
         self.up4 = nn.Upsample(scale_factor=4)
+        self.up8 = nn.Upsample(scale_factor=8)
 
         
         self.aux_layer = nn.Sequential(
@@ -68,19 +69,25 @@ class hrnet_w48_ocr_up4(nn.Module):
     def forward(self,x):
         # print('in ',x.shape)
         x = self.hrnet_w48_ocr(x)
-        
-        # x1 = self.up4(x[0])
+
+        # x1 = self.up8(x[0])
         # x1 = self.aux_layer(x1)
         # # print('out 1',x1.shape)
-        # x2 = self.up4(x[1])
+        # x2 = self.up8(x[1])
         # x2 = self.last_layer(x2)
         
-        x1 = self.up2(x[0])
+        x1 = self.up4(x[0])
         x1 = self.aux_layer(x1)
         # print('out 1',x1.shape)
-        x2 = self.up2(x[1])
+        x2 = self.up4(x[1])
         x2 = self.last_layer(x2)
-        # print('out 2',x2.shape)
+        
+        # x1 = self.up2(x[0])
+        # x1 = self.aux_layer(x1)
+        # # print('out 1',x1.shape)
+        # x2 = self.up2(x[1])
+        # x2 = self.last_layer(x2)
+        # # print('out 2',x2.shape)
         return [self.up2(x1),self.up2(x2)]    
 
     def freeze_layers(self,num_layers=9): #默认冻结前9层

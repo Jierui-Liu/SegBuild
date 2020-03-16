@@ -24,18 +24,25 @@ if __name__ == "__main__":
 
     dir_list = [
         # r"/home/chenbangdong/cbd/LinHonghui/exp/20200225_HRNet_W48_p7794/epoch_4", #78.14
-        r"../exp/result_0.7860/",
+        # r"../exp/result_0.7860/",
         # r"../exp/result_0.8074/",
         # r"../exp/result_8228/",
         # r"../exp/result_8220/",
-        r"../exp/lll/",
-        r"../exp/20200307_hrnet_w48_ocr_up4_default_w95_pesudo_highscore_1_24000/",
+        r"../exp/exp/result_ensemble/",
+        r"../exp/20200316_hrnet_w48_ocr_up4_default_4_pesudo_highscore_2_continue_9_16000/",
+        r"../exp/hh/",
+        # r"../exp/20200316_hrnet_w48_ocr_up4_default_4_pesudo_highscore_2_continue_8_18000/",
+        # r"../exp/20200316_hrnet_w48_ocr_up4_default_4_pesudo_highscore_2_continue_8_27000/",
+        # r"../exp/20200316_hrnet_w48_ocr_up4_default_4_pesudo_highscore_2_continue_8_36000/",
+        # r"../exp/20200312_hrnet_w48_ocr_up4_default_4_w9_pesudo_highscore_2_continue_1_32000/",
+        # r"../exp/result_8309/",
         # r"../exp/result_ensemble_highrecall/",
         # r"../exp/20200305_hrnet_w48_ocr_up4_default_w8_lr1_50000/",
         # r"/home/l/deeplearning_1/cbd/LinHonghui/SegBulid_jr/result_0.7682_labelsmooth_epoch4",# 
         # r"/home/l/deeplearning_1/cbd/LinHonghui/SegBuild_master/exp/20200303_hrnet_w48_ocr_up4_configs_20000"# 不确定
     ]
     for dir in dir_list:
+        print(dir,len(os.listdir(dir)))
         assert len(os.listdir(dir))==11481
     file_list = os.listdir(dir_list[0])
 
@@ -43,7 +50,6 @@ if __name__ == "__main__":
     def fun(save_dir,dir_list,tif_file):
         tif_list = [cv.imread(os.path.join(dir,tif_file),cv.IMREAD_UNCHANGED) for dir in dir_list]
         tif_list = np.array(tif_list)
-        tif_mask=tif_list[0,...]
         tif_mask=tif_list[0,...]
         
         image_init=cv.imread(os.path.join('/home/liujierui/proj/Dataset/test',tif_file[:-4],tif_file))
@@ -115,25 +121,28 @@ if __name__ == "__main__":
             #     tif[tif<2] = 0
             #     tif[tif>=2] = 1
 
-            tif_list[2,:,:][image_v<mean_v]=0
-
-            tif_list=tif_list[1:,:,:]
+            # if tif_list[0,:,:].sum()==0:
+            #     tif_list[1,:,:][tif_list[1,:,:]>0]=0
+            # elif tif_list[1,:,:].sum()*2+10000>tif_list[0,:,:].sum() and tif_list[0,:,:].sum()*2+10000>tif_list[1,:,:].sum():
+            #     pass 
+            # else:
+            #     tif_list[1,:,:][tif_list[1,:,:]>0]=0
             tif = tif_list.sum(axis=0)
-            tif[tif>0] = 1
+            tif[tif<2] = 0
+            tif[tif>=2] = 1
         
-
 
         cv.imwrite(os.path.join(save_dir,tif_file),tif)
 
     P = Pool(16)
-    for tif_file in file_list:
-        P.apply_async(fun,(save_dir,dir_list,tif_file))
-        # tif_list = [cv.imread(os.path.join(dir,tif_file),cv.IMREAD_UNCHANGED) for dir in dir_list]
-        # tif_list = np.array(tif_list)
-        # tif = tif_list.sum(axis=0)
-        # tif[tif<2] = 0
-        # tif[tif>=2] = 1
-        # cv.imwrite(os.path.join(save_dir,tif_file),tif)
+    for tif_file in tqdm(file_list):
+        # P.apply_async(fun,(save_dir,dir_list,tif_file))
+        tif_list = [cv.imread(os.path.join(dir,tif_file),cv.IMREAD_UNCHANGED) for dir in dir_list]
+        tif_list = np.array(tif_list)
+        tif = tif_list.sum(axis=0)
+        tif[tif<2] = 0
+        tif[tif>=2] = 1
+        cv.imwrite(os.path.join(save_dir,tif_file),tif)
     P.close()
     P.join()
 
